@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Commons" default="war" basedir=".">
+    <property name="src.dir" value="src/java"/>
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="war.dir" value="${build.dir}/war"/>
+    <property name="lib.dir" value="../lib"/>
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+
+    <target name="compile" depends="clean">
+        <echo message="Building module: ${ant.project.name}"/>
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" includeantruntime="false">
+        </javac>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="war" depends="compile">
+        <mkdir dir="${war.dir}"/>
+        <war destfile="${war.dir}/${ant.project.name}.war" needxmlfile="false">
+            <!--<lib dir="${lib.dir}"/>-->
+            <classes dir="${classes.dir}"/>
+        </war>
+    </target>
+
+</project>
