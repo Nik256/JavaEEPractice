@@ -1,4 +1,4 @@
-package java.com.epam.converter.bean;
+package com.epam.converter.bean;
 
 import javax.ejb.*;
 import java.math.BigDecimal;

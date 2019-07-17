@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="Commons" default="war" basedir=".">
+<project name="Commons" default="deploy" basedir=".">
     <property name="src.dir" value="src/java"/>
     <property name="build.dir" value="build"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
     <property name="war.dir" value="${build.dir}/war"/>
     <property name="lib.dir" value="../lib"/>
+    <property name="asadmin" value="C:/glassfish3/bin/asadmin.bat"/>
+    <property name="appclient" value="C:/glassfish3/glassfish/bin/appclient.bat"/>
 
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
@@ -27,6 +29,20 @@
             <!--<lib dir="${lib.dir}"/>-->
             <classes dir="${classes.dir}"/>
         </war>
+    </target>
+
+    <target name="deploy" depends="war">
+        <exec executable="${asadmin}">
+            <arg line="deploy"/>
+            <arg line="${war.dir}/${ant.project.name}.war" />
+        </exec>
+    </target>
+
+    <target name="undeploy">
+        <exec executable="${asadmin}">
+            <arg line="undeploy"/>
+            <arg line="${ant.project.name}" />
+        </exec>
     </target>
 
 </project>

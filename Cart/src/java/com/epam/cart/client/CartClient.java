@@ -7,6 +7,7 @@ import javax.ejb.EJB;
 import java.util.List;
 
 public class CartClient {
+
     @EJB
     private static Cart cart;
 
@@ -34,7 +35,7 @@ public class CartClient {
 
             System.exit(0);
         } catch (BookException ex) {
-            System.err.println("Caught a BookException: " + ex.getMessage());
+            System.out.println("Caught a BookException: " + ex.getMessage());
             System.exit(0);
         }
     }

@@ -1,4 +1,56 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="Cart" default="war" basedir=".">
+<project name="cart" default="run" basedir=".">
     <import file="../build-common.xml"/>
+    <property name="ear.dir" value="${build.dir}/ear"/>
+    <property name="jar.dir" value="${build.dir}/jar"/>
+    <property name="main-class" value="com.epam.cart.client.CartClient"/>
+    <property name="cart-client" value="cart-client-app"/>
+    <property name="ejb" value="cart-ejb"/>
+    <property name="ear.dir" value="${build.dir}/ear"/>
+    <property name="appxml" value="application.xml"/>
+    <property name="client.dir" value="${build.dir}/client"/>
+
+    <target name="ear" depends="jar">
+        <ear destfile="${ear.dir}/${ant.project.name}.ear" appxml="${appxml}">
+            <fileset dir="${jar.dir}" includes="*.jar,*.war"/>
+        </ear>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${cart-client}.jar" basedir="${classes.dir}/com/epam/cart/client">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+
+        <jar destfile="${jar.dir}/${ejb}.jar">
+            <fileset dir="${classes.dir}"
+                     includes="**/*.class"
+                     excludes="**/CartClient.class"/>
+        </jar>
+    </target>
+
+    <target name="deploy" depends="ear">
+        <exec executable="${asadmin}">
+            <arg line="deploy"/>
+            <arg line="${ear.dir}/${ant.project.name}.ear"/>
+        </exec>
+    </target>
+
+    <target name="run" depends="get-client-jar">
+        <exec executable="${appclient}">
+            <arg line="-client"/>
+            <arg line="${client.dir}/cartClient.jar"/>
+        </exec>
+    </target>
+
+    <target name="get-client-jar" depends="deploy">
+        <exec executable="${asadmin}">
+            <arg line="get-client-stubs"/>
+            <arg line="--appname"/>
+            <arg line="${ant.project.name}"/>
+            <arg line="${client.dir}"/>
+        </exec>
+    </target>
 </project>
